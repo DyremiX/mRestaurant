@@ -7,4 +7,4 @@ następnie
 `npm install`
 
 Aby uruchomić:
-'npm run dev'
+`npm run dev`
