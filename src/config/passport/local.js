@@ -6,8 +6,7 @@ const Pracownik = require('../../models/Pracownik.js');
 
 module.exports = (passport) => {
   passport.use(
-    new LocalStrategy({ usernameField: 'login' }, (login, password, done) => {
-      // Match user
+    new LocalStrategy({ usernameField: 'login', passwordField: 'password' },(login, password, done) => {
       Pracownik.findOne({
         login: login
       }).then(user => {
@@ -21,7 +20,7 @@ module.exports = (passport) => {
           if (isMatch) {
             return done(null, user);
           } else {
-            return done(null, false, { message: 'Haslo nieprawidłowe' });
+            return done(null, false, { message: 'Hasło nieprawidłowe' });
           }
         });
       });

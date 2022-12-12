@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const indexController = require('../controllers/index.controller.js');
-const auth = require('../config/auth.js');
+const authMiddleware = require('../config/passport/auth.js');
 
-/* GET home page. */
-
-router.get('/', auth.ensureAuthenticated, indexController.mainIndex); 
+/**
+ * INDEX PAGE
+ */
+router.get('/', authMiddleware.ensureAuthenticated, indexController.getIndex); 
 
 
 module.exports = router;

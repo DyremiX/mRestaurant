@@ -1,21 +1,22 @@
 const mongoose = require('mongoose');
+const findOrCreate = require('mongoose-find-or-create')
 
 const PracownikSchema = new mongoose.Schema({
-    imie: {
+    fName: {
         type: String,
         required: true
     },
-    nazwisko: {
+    lName: {
         type: String,
         required: true
     },
-    adres: {
+    address: {
         type: String,
         required: false
     },
-    rola: {
+    role: {
         type: String,
-        enum: ['Manager', 'Kierownik restauracji', 'Admin'],
+        enum: ['Manager', 'Kierownik Restauracji', 'Admin'],
         default: 'Manager',
         required: true
     },
@@ -31,20 +32,27 @@ const PracownikSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    created: {
+    createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+        required: false
+    },
+    passwordToReset:{
+        type: Boolean,
+        default: true,
+        required: false
     },
 }, {
     virtuals: {
         fullName: {
             get() {
-                return this.imie + ' ' + this, nazwisko;
+                return this.fName + ' ' + this.lName;
             }
         }
     }
 });
+PracownikSchema.plugin(findOrCreate);
 
-const Pracownik = mongoose.model('User', Pracownik);
+const Pracownik = mongoose.model('Pracownik', PracownikSchema);
 
 module.exports = Pracownik;

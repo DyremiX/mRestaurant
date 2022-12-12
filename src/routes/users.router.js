@@ -1,9 +1,21 @@
 const router = require('express').Router();
+const authMiddleware = require('../config/passport/auth.js');
+const usersController = require('../controllers/users.controller.js');
 
+/**
+ * USERS LIST PAGE
+ */
+router.get('/', authMiddleware.ensureIsKR, usersController.getUsersPage);
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('users', { title: 'Express' });
-});
+/**
+ * ADD USER PAGE
+ */
+router.get('/add', authMiddleware.ensureIsKR, usersController.getAddUser);
+router.post('/add', authMiddleware.ensureIsKR, usersController.postAddUser);
+
+/**
+ * USERS LIST API
+ */
+router.get('/api/', authMiddleware.ensureIsKR, usersController.getUsersApi);
 
 module.exports = router;

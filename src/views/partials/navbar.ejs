@@ -1,0 +1,66 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">mRestaurant</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+          <% if (user.role != 'Manager') { %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Użytkownicy</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/users/">Lista</a>
+                <a class="dropdown-item" href="/users/add">Dodaj użytkownika</a>
+            </li>
+          <% } %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Magazyny</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/storages/">Lista</a>
+              <% if (user.role != 'Manager') { %>
+                <a class="dropdown-item" href="/storages/add/">Dodaj magazyn</a>
+              <% } %>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Produkty</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/products/">Lista</a>
+              <% if (user.role != 'Manager') { %>
+                <a class="dropdown-item" href="/products/add/">Dodaj</a>
+              <% } %>
+              <a class="dropdown-item" href="/wastages/products">Lista strat</a>
+              <a class="dropdown-item" href="/products/add/wastages">Wprowadź straty</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Pół-Produkty</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/spproducts/">Lista</a>
+              <% if (user.role != 'Manager') { %>
+                <a class="dropdown-item" href="/spproducts/add/">Dodaj</a>
+              <% } %>
+              <a class="dropdown-item" href="/wastages/spproducts">Lista strat</a>
+              <a class="dropdown-item" href="/spproducts/add/wastages">Wprowadź straty</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Straty</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/wastages/">Straty ogólne</a>
+              <a class="dropdown-item" href="/wastages/products">Lista strat Produktów</a>
+              <a class="dropdown-item" href="/products/add/wastages">Wprowadź straty Produktów</a>
+              <a class="dropdown-item" href="/wastages/spproducts">Lista strat Produktów</a>
+              <a class="dropdown-item" href="/spproducts/add/wastages">Wprowadź straty PółProduktów</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Moje konto</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/account/profile">Moje dane</a>
+              <a class="dropdown-item" href="/account/change">Zmień hasło</a>
+              <a class="dropdown-item" href="/account/logout">Wyloguj...</a>
+          </li>
+        </ul>
+        <a href="/account/logout" class="btn btn-secondary btn-sm" role="button" data-bs-toggle="button" >Wyloguj</a>
+      </div>
+    </div>
+  </nav>

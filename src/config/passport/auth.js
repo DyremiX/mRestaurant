@@ -17,6 +17,10 @@ const _opts = {
 }
 
 module.exports = {
+    /**
+     * Ensure user is authenticated
+     * @description Sprawdza czy użytkownik jest aktualnie zalogowany, jeśli nie zostaje odesłany na wskazaną ścieżkę
+     */
     ensureAuthenticated: (req, res, next) => {
       if (req.isAuthenticated()) {
         return next();
@@ -24,31 +28,49 @@ module.exports = {
       req.flash(_opts.notLogged.flash, _opts.notLogged.text);
       res.redirect(_opts.notLogged.redirectPath);
     },
+    /**
+     * Forward if authenticated
+     * @description Odsyła zalogowanego użytkownika na stronę główną
+     */
+    forwardAuthenticated: function(req, res, next) {
+        if (!req.isAuthenticated()) {
+          return next();
+        }
+        res.redirect('/');      
+    },
+    /**
+     * Ensure user have 'Admin' role
+     * @description Sprawdza czy użytkownik posiada uprawnienia Admina, jeśli nie zostaje odesłany na wskazaną ścieżkę
+     */
     ensureIsAdmin:  (req, res, next) => {
         if (!req.isAuthenticated()) {
             req.flash(_opts.notLogged.flash, _opts.notLogged.text);
             return res.redirect(_opts.notLogged.redirectPath);
         }
 
-        if (req.user.role == 'Admin') { //IF ROLE == Admin
+        if (req.user.role == 'Admin') {
             req.flash(_opts.notAdmin.flash, _opts.notAdmin.text);
             return res.redirect(_opts.notAdmin.redirectPath);
         }
         
         return next();
     },
+    /**
+     * Ensure user have 'Admin' or 'Kierownik restauracji' role
+     * @description Sprawdza czy użytkownik posiada uprawnienia Admina lub Kierownika Restauracji, jeśli nie zostaje odesłany na wskazaną ścieżkę
+     */
     ensureIsKR:  (req, res, next) => {
         if (!req.isAuthenticated()) {
             req.flash(_opts.notLogged.flash, _opts.notLogged);
+            console.log("1");
             return res.redirect(_opts.notLogged.redirectPath);
         }
 
-        if (false) { //IF ROLE == Admin || ROLE == Kierownik Restauracji
-            req.flash(_opts.notKR.flash, _opts.notKR.text);
-            return res.redirect(_opts.notKR.redirectPath);
-
+        if (req.user.role != 'Manager') {
+            return next();
         }
         
-        return next();
+        req.flash(_opts.notKR.flash, _opts.notKR.text);
+        return res.redirect(_opts.notKR.redirectPath);
     },
   };

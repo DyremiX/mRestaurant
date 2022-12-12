@@ -1,29 +1,34 @@
 const router = require('express').Router();
+const authMiddleware = require('../config/passport/auth.js');
+const accountController = require('../controllers/account.controller.js');
+
+/**
+ * LOGIN PAGE
+ */
+router.get('/login', authMiddleware.forwardAuthenticated, accountController.getLoginPage);
+router.post('/login', authMiddleware.forwardAuthenticated, accountController.postLoginPage);
 
 
-/* GET login page. */
-router.get('/login', function(req, res, next) {
-  res.render('users', { title: 'Login panel' });
-});
+/**
+ * PROFILE PAGE
+ */
+router.get('/profile', authMiddleware.ensureAuthenticated, accountController.getProfilePage);
 
-/* GET user profile page. */
-router.get('/profile', function(req, res, next) {
-    res.render('users', { title: 'user profile page' });
-});
 
-/* GET password reset page. */
-router.get('/settings/passwd/reset', function(req, res, next) {
-    res.render('users', { title: 'password reset page' });
-});
+/**
+ * PASSWORD CHANGE/RESET PAGES
+ */
+router.get('/reset', authMiddleware.ensureAuthenticated, accountController.getPasswdResetPage);
+router.post('/reset', authMiddleware.ensureAuthenticated, accountController.postPasswdResetPage);
 
-/* GET password change page. */
-router.get('/settings/passwd/change', function(req, res, next) {
-    res.render('users', { title: 'password change page' });
-});
+router.get('/change', authMiddleware.ensureAuthenticated, accountController.getPasswdChangePage);
+router.post('/change', authMiddleware.ensureAuthenticated, accountController.postPasswdChangePage);
 
-/* GET logout page. */
-router.get('/logout', function(req, res, next) {
-    res.render('users', { title: 'logout page' });
-});
+
+/**
+ * LOGOUT PAGE
+ */
+router.get('/logout', authMiddleware.ensureAuthenticated, accountController.getLogout);
+
 
 module.exports = router;

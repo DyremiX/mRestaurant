@@ -8,23 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const passport = require('passport');
-
-/**
- * Database connection
- */
-/*mongoose
-    .connect(
-        process.env.MONGODB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        }
-    )
-    .then(() => console.log('Connected to the MongoDB database'))
-    .catch(err => {
-        console.log(err)
-        process.exit();
-    });*/
-
+const expressLayouts = require('express-ejs-layouts');
 
 /**
  * Create Express.js app
@@ -37,6 +21,7 @@ const app = express();
  */
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
 
 
 /**
@@ -48,7 +33,24 @@ app.use(express.urlencoded({
     extended: false
 }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'src/public')));
+console.log(path.join(__dirname, 'src/public'))
+app.use('/public', express.static(path.join(__dirname, 'src/public')));
+
+/**
+ * Database connection
+ */
+mongoose
+    .connect(
+        process.env.MONGODB_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }
+    )
+    .then(() => console.log('Connected to the MongoDB database'))
+    .catch(err => {
+        console.log(err)
+        process.exit();
+    });
 
 /**
  * Passport.js and session setup
@@ -59,11 +61,12 @@ app.use(
       resave: false,
       saveUninitialized: true,
       cookie:{_expires : 1000 * 60 * 60 * 24 * 7},
-      //store: new MongoStore({ mongooseConnection: mongoose.connection })
+      store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL })
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
+require('./src/config/passport/local.js')(passport);
 
 
 /**
@@ -83,9 +86,19 @@ app.use((req, res, next) => {
  */
 const indexRouter = require('./src/routes/index.router.js');
 const accountRouter = require('./src/routes/account.router.js');
+const usersRouter = require('./src/routes/users.router.js');
+const storagesRouter = require('./src/routes/storages.router.js');
+const productsRouter = require('./src/routes/products.router.js');
+const spproductsRouter = require('./src/routes/spproducts.router.js');
+const wastagesRouter = require('./src/routes/wastages.router.js');
 
 app.use('/', indexRouter);
 app.use('/account', accountRouter);
+app.use('/users', usersRouter);
+app.use('/storages', storagesRouter);
+app.use('/products', productsRouter);
+app.use('/spproducts', spproductsRouter);
+app.use('/wastages', wastagesRouter);
 
 
 /**

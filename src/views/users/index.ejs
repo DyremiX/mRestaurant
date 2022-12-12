@@ -1,0 +1,49 @@
+<div class="row mt-5">
+    <div class="col-md-12 m-auto">
+      <div class="card card-body">
+        <h1 class="mt-4">Users list page</h1>
+        <%- include('../partials/messages.ejs'); %>
+        <div id="dane"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+<script>
+fetch('/users/api/')
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data)
+    document.getElementById('dane').innerText = JSON.stringify(data);
+  });
+
+
+var table = new Tabulator("#example-table", {
+    data:tabledata,           //load row data from array
+    layout:"fitColumns",      //fit columns to width of table
+    responsiveLayout:"hide",  //hide columns that dont fit on the table
+    addRowPos:"top",          //when adding a new row, add it to the top of the table
+    history:true,             //allow undo and redo actions on the table
+    pagination:"local",       //paginate the data
+    paginationSize:7,         //allow 7 rows per page of data
+    paginationCounter:"rows", //display count of paginated rows in footer
+    movableColumns:true,      //allow column order to be changed
+    initialSort:[             //set the initial sort order of the data
+        {column:"name", dir:"asc"},
+    ],
+    columnDefaults:{
+        tooltip:true,         //show tool tips on cells
+    },
+    columns:[                 //define the table columns
+        {title:"Imię", field:"fname"},
+        {title:"Nazwisko", field:"lName"},
+        {title:"Adres", field:"address"},
+        {title:"Rola", field:"role"},
+        {title:"Login", field:"login"},
+        {title:"Email", field:"email"},
+    ],
+});
+</script>
